@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style type="text/css">
+		*{margin: 0;padding: 0;}
+		#box{width: 700px;height: 300px;border: 1px solid #ccc;position: absolute;}
+		.left{height: 200px;float: left;padding: 20px;}
+		.right{height: 500px;float: left;}
+		.icon{font-size: 0;width: 180px;height: 180px;margin-bottom: 30px;}
+		.hide{display: none;}
+		.small{width: 28px;float: left;margin-right: 10px;}
+		h2{padding: 20px 0 0;}
+		p{color: red;font-size: 50px;font-weight: bold;}
+		ul{height: 40px;}
+		li{list-style: none;float: left;width: 60px;height: 20px;line-height: 20px;padding: 10px 20px;border: 1px solid #ccc;margin-right: 10px;text-align: center;}
+		li:hover{border-color: red;}
+		.ac{border-color: red;}
+		#num{width: 60px;height: 40px;border: 1px solid #ccc;margin-top: 20px;}
+		#numb{float: left;width: 40px;height: 40px;text-align: center;line-height: 40px;}
+		#numbe{float: right;height: 40px;}
+		#plus{width: 19px;height: 19px;border-left: 1px solid #ccc;border-bottom: 1px solid #ccc;text-align: center;line-height: 20px;}
+		#plus:hover{background: #ccc;}
+		#del{width: 19px;height: 20px;border-left: 1px solid #ccc;text-align: center;line-height: 20px;}
+		#del:hover{background: #ccc;}
+		button{margin: 20px 0;width: 100px;height: 40px;}
+	</style>
+	<body>
+		<div id="box">
+			<div class="left">
+				<div class="icon">
+					<img src="images/0.jpg"/>
+					<img src="images/1.jpg" class="hide"/>
+					<img src="images/2.jpg" class="hide"/>
+					<img src="images/3.jpg" class="hide"/>
+					<img src="images/4.jpg" class="hide"/>
+				</div>
+				<div class="roll">
+					<img src="images/0.jpg" class="small"/>
+					<img src="images/1.jpg" class="small"/>
+					<img src="images/2.jpg" class="small"/>
+					<img src="images/3.jpg" class="small"/>
+					<img src="images/4.jpg" class="small"/>
+				</div>
+			</div>
+			<div class="right">
+				<h2>淘宝选女友---不要998,女友带回家!!</h2>
+				<p>480-99988元</p>
+				<ul>
+					<li>标准版</li>
+					<li>升级版</li>
+					<li>豪华版</li>
+					<li>定制版</li>
+				</ul>
+				<div id="num">
+					<div id="numb"></div>
+					<div id="numbe">
+						<div id="plus">+</div>
+						<div id="del">-</div>
+					</div>
+				</div>
+				<button type="button" id='btn'>加入购物车</button>
+			</div>
+		</div>
+	</body>
+</html>
+<script type="text/javascript">
+	//找到box设置box定位
+	var oBox=document.getElementById('box');
+	//设置变量得到浏览器宽高
+	var s_w=document.documentElement.clientWidth;
+	var s_h=document.documentElement.clientHeight;
+	//计算box和浏览器左边和上边的距离
+	var l=(s_w-oBox.offsetWidth)/2;
+	var t=(s_h-oBox.offsetHeight)/2;
+	oBox.style.left=l+'px';
+	oBox.style.top=t+'px';
+	
+	//创建P标签内容数组
+	var arr=['480元','1860元','5880元','99988元','480-99988元'];
+	//找到P标签
+	var oP=document.getElementsByTagName('p')[0];
+	
+	//找到class名为icon的盒子和img标签
+	var iDiv=document.getElementsByClassName('icon')[0];
+	var aPic1=iDiv.getElementsByTagName('img');
+		
+	//找到元素ul
+	var oUl=document.getElementsByTagName('ul')[0];
+	var oLi=oUl.getElementsByTagName('li');
+	
+	//总体思路,li的编号和p的数组下标,大图和小图的编号配对.
+	
+	//给UL下的li绑定事件并设置节点属性
+	for(var j=0;j<oLi.length;j++){
+		//给li做编号，比较对应图片
+		oLi[j].index=j;
+		oLi[j].onclick=run;
+	};
+	//点击更换标签
+	function run(){
+		//点击的时候让所有图片隐藏
+		for(var k=0;k<aPic1.length;k++){
+			aPic1[k].className='hide';
+		};
+		//让4个版本选项对应的价格显示
+		oP.innerHTML=arr[this.index];
+		//让4个版本选项对应的图片显示
+		aPic1[this.index+1].className='';
+		//当版本选项未选中的时候，清空所有class名字，增加点击的class名为ac
+		if(this.className==''){
+			for(var i=0;i<oLi.length;i++){
+				oLi[i].className='';
+			};
+			n=0;
+			oBtn.removeAttribute('disabled');
+			oNumb.innerHTML=++n;
+			this.className='ac';
+		//当版本选项已经选中的时候，清空class名字,让默认图片和价格显示，让选项对应的图片隐藏，
+		}else{
+			this.className='';
+			aPic1[0].className='';
+			aPic1[this.index+1].className='hide';
+			oP.innerHTML=arr[arr.length-1];
+			oNumb.innerHTML=0;
+			oBtn.setAttribute('disabled','');
+		};
+	};
+	//找到购物车按钮
+	var oBtn=document.getElementById('btn');
+	//默认屏蔽购物车点击
+	oBtn.setAttribute('disabled','');
+	//找到购物车数字框
+	var oNumb=document.getElementById('numb');
+	var n=0;
+	//给购物车数字框内容赋值
+	oNumb.innerHTML=n;
+	//找到购物车+号框和-号框
+	var oPlus=document.getElementById('plus');
+	var oDel=document.getElementById('del');
+	//绑定增加购物框数量事件
+	oPlus.onclick=function(){
+		oNumb.innerHTML=++n;
+		if(n>0&&oP.innerHTML!=arr[arr.length-1]){
+		//开启购物车点击,否则关闭购物车点击
+			oBtn.removeAttribute('disabled');
+		}else{
+			oBtn.setAttribute('disabled','');
+		};
+		if(n>4){
+			alert('不要太贪心')
+		};
+	};
+	oDel.onclick=function(){
+		//当N<=0的时候N为0；
+		if(n<=0){
+			oNumb.innerHTML=0;
+		}else{
+			oNumb.innerHTML=--n;
+		};
+		if(n>0&&oP.innerHTML!=arr[arr.length-1]){
+		//开启购物车点击,否则关闭购物车点击
+			oBtn.removeAttribute('disabled');
+		}else{
+			oBtn.setAttribute('disabled','');
+		};
+	};
+	//鼠标移动小图片,更换对应的大图片
+	//找到class名为roll的盒子和img标签
+	var rDiv=document.getElementsByClassName('roll')[0];
+	var aPic2=rDiv.getElementsByTagName('img');
+	//绑定鼠标移入移出事件
+	for(var m=0;m<aPic2.length;m++){
+		aPic2[m].index=m;
+		//鼠标移入事件
+		aPic2[m].onmouseover=function(){
+			for(var l=0;l<aPic2.length;l++){
+				aPic1[l].className='hide';
+				aPic1[this.index].className='';
+			};
+		};
+		//鼠标移出事件
+		aPic2[m].onmouseout=function(){
+			for(var l=0;l<aPic2.length;l++){
+				aPic1[l].className='hide';
+				aPic1[0].className='';
+			};
+		};
+	};
+	
+	
+	
+
+	
+	
+</script>
